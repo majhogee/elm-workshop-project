@@ -7,39 +7,46 @@ import Html.Events exposing (..)
 
 
 type alias Model =
-    Int
+    Int
 
 
 type Msg
-    = Increase | Decrease
+    = Increase
+    | Decrease
+    | Reset
 
 
 main =
-    Browser.sandbox
-        { init = init
-        , view = view
-        , update = update
-        }
+    Browser.sandbox
+        { init = init
+        , view = view
+        , update = update
+        }
 
 
 init : Model
 init =
-    0
+    0
 
 
 update : Msg -> Model -> Model
 update msg model =
-    case msg of
-        Increase ->
-            model + 1
-        Decrease ->
-            model - 1
+    case msg of
+        Increase ->
+            model + 1
+
+        Decrease ->
+            model - 1
+
+        Reset ->
+            init
 
 
 view : Model -> Html Msg
 view count =
-    div []
-        [ button [ type_ "button", onClick Decrease] [ text "-" ]
-        , text (String.fromInt count)
-        , button [ type_ "button", onClick Increase ] [ text "+" ]
-        ]
+    div []
+        [ button [ type_ "button", onClick Decrease ] [ text "-" ]
+        , text (String.fromInt count)
+        , button [ type_ "button", onClick Increase ] [ text "+" ]
+        , button [ type_ "button", onClick Reset ] [ text "Reset" ]
+        ]
