@@ -10574,15 +10574,21 @@ var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Increase':
-				return model + 1;
+				var step = msg.a;
+				return model + step;
 			case 'Decrease':
-				return model - 1;
+				var step = msg.a;
+				return model - step;
 			default:
 				return $author$project$Main$init;
 		}
 	});
-var $author$project$Main$Decrease = {$: 'Decrease'};
-var $author$project$Main$Increase = {$: 'Increase'};
+var $author$project$Main$Decrease = function (a) {
+	return {$: 'Decrease', a: a};
+};
+var $author$project$Main$Increase = function (a) {
+	return {$: 'Increase', a: a};
+};
 var $author$project$Main$Reset = {$: 'Reset'};
 var $author$project$Main$view = function (count) {
 	return A2(
@@ -10595,11 +10601,24 @@ var $author$project$Main$view = function (count) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$type_('button'),
-						$elm$html$Html$Events$onClick($author$project$Main$Decrease)
+						$elm$html$Html$Events$onClick(
+						$author$project$Main$Decrease(1))
 					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('-')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$type_('button'),
+						$elm$html$Html$Events$onClick(
+						$author$project$Main$Decrease(5))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('-5')
 					])),
 				$elm$html$Html$text(
 				$elm$core$String$fromInt(count)),
@@ -10608,11 +10627,24 @@ var $author$project$Main$view = function (count) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$type_('button'),
-						$elm$html$Html$Events$onClick($author$project$Main$Increase)
+						$elm$html$Html$Events$onClick(
+						$author$project$Main$Increase(1))
 					]),
 				_List_fromArray(
 					[
 						$elm$html$Html$text('+')
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$type_('button'),
+						$elm$html$Html$Events$onClick(
+						$author$project$Main$Increase(5))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('+5')
 					])),
 				A2(
 				$elm$html$Html$button,
@@ -10630,7 +10662,7 @@ var $author$project$Main$view = function (count) {
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
 	{init: $author$project$Main$init, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"Increase":[],"Decrease":[],"Reset":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"Increase":["Basics.Int"],"Decrease":["Basics.Int"],"Reset":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}}}}})}});}(this));
 
   var app = Elm.Main.init({ node: document.getElementById("elm") });
 }

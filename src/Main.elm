@@ -11,8 +11,8 @@ type alias Model =
 
 
 type Msg
-    = Increase
-    | Decrease
+    = Increase Int
+    | Decrease Int
     | Reset
 
 
@@ -32,11 +32,11 @@ init =
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Increase ->
-            model + 1
+        Increase step ->
+            model + step
 
-        Decrease ->
-            model - 1
+        Decrease step ->
+            model - step
 
         Reset ->
             init
@@ -45,8 +45,10 @@ update msg model =
 view : Model -> Html Msg
 view count =
     div []
-        [ button [ type_ "button", onClick Decrease ] [ text "-" ]
+        [ button [ type_ "button", onClick (Decrease 1)] [ text "-" ]
+        , button [ type_ "button", onClick (Decrease 5)] [ text "-5" ]
         , text (String.fromInt count)
-        , button [ type_ "button", onClick Increase ] [ text "+" ]
+        , button [ type_ "button", onClick (Increase 1)] [ text "+" ]
+        , button [ type_ "button", onClick (Increase 5)] [ text "+5" ]
         , button [ type_ "button", onClick Reset ] [ text "Reset" ]
         ]
