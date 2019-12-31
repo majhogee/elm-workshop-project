@@ -4952,7 +4952,8 @@ function _Browser_load(url)
 		}
 	}));
 }
-var $author$project$Main$init = 0;
+var $elm$core$Maybe$Nothing = {$: 'Nothing'};
+var $author$project$Main$init = $elm$core$Maybe$Nothing;
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -5059,7 +5060,6 @@ var $elm$core$Basics$add = _Basics_add;
 var $elm$core$Maybe$Just = function (a) {
 	return {$: 'Just', a: a};
 };
-var $elm$core$Maybe$Nothing = {$: 'Nothing'};
 var $elm$core$String$all = _String_all;
 var $elm$core$Basics$and = _Basics_and;
 var $elm$core$Basics$append = _Utils_append;
@@ -10570,17 +10570,37 @@ var $elm$browser$Browser$sandbox = function (impl) {
 			view: impl.view
 		});
 };
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Increase':
 				var step = msg.a;
-				return model + step;
+				return A2(
+					$elm$core$Maybe$map,
+					$elm$core$Basics$add(step),
+					model);
 			case 'Decrease':
 				var step = msg.a;
-				return model - step;
+				return A2(
+					$elm$core$Maybe$map,
+					function (count) {
+						return count - step;
+					},
+					model);
+			case 'Reset':
+				return $elm$core$Maybe$Just(0);
 			default:
-				return $author$project$Main$init;
+				return $elm$core$Maybe$Just(0);
 		}
 	});
 var $author$project$Main$Decrease = function (a) {
@@ -10589,80 +10609,102 @@ var $author$project$Main$Decrease = function (a) {
 var $author$project$Main$Increase = function (a) {
 	return {$: 'Increase', a: a};
 };
+var $author$project$Main$Initialize = {$: 'Initialize'};
 var $author$project$Main$Reset = {$: 'Reset'};
-var $author$project$Main$view = function (count) {
-	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('button'),
-						$elm$html$Html$Events$onClick(
-						$author$project$Main$Decrease(1))
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('-')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('button'),
-						$elm$html$Html$Events$onClick(
-						$author$project$Main$Decrease(5))
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('-5')
-					])),
-				$elm$html$Html$text(
-				$elm$core$String$fromInt(count)),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('button'),
-						$elm$html$Html$Events$onClick(
-						$author$project$Main$Increase(1))
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('+')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('button'),
-						$elm$html$Html$Events$onClick(
-						$author$project$Main$Increase(5))
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('+5')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('button'),
-						$elm$html$Html$Events$onClick($author$project$Main$Reset)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Reset')
-					]))
-			]));
+var $author$project$Main$view = function (model) {
+	if (model.$ === 'Nothing') {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('button'),
+							$elm$html$Html$Events$onClick($author$project$Main$Initialize)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Initialize')
+						]))
+				]));
+	} else {
+		var count = model.a;
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('button'),
+							$elm$html$Html$Events$onClick(
+							$author$project$Main$Decrease(1))
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('-')
+						])),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('button'),
+							$elm$html$Html$Events$onClick(
+							$author$project$Main$Decrease(5))
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('-5')
+						])),
+					$elm$html$Html$text(
+					$elm$core$String$fromInt(count)),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('button'),
+							$elm$html$Html$Events$onClick(
+							$author$project$Main$Increase(1))
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('+')
+						])),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('button'),
+							$elm$html$Html$Events$onClick(
+							$author$project$Main$Increase(5))
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('+5')
+						])),
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$type_('button'),
+							$elm$html$Html$Events$onClick($author$project$Main$Reset)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Reset')
+						]))
+				]));
+	}
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(
 	{init: $author$project$Main$init, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"Increase":["Basics.Int"],"Decrease":["Basics.Int"],"Reset":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}}}}})}});}(this));
+	$elm$json$Json$Decode$succeed(_Utils_Tuple0))({"versions":{"elm":"0.19.1"},"types":{"message":"Main.Msg","aliases":{},"unions":{"Main.Msg":{"args":[],"tags":{"Increase":["Basics.Int"],"Decrease":["Basics.Int"],"Reset":[],"Initialize":[]}},"Basics.Int":{"args":[],"tags":{"Int":[]}}}}})}});}(this));
 
   var app = Elm.Main.init({ node: document.getElementById("elm") });
 }

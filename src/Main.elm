@@ -7,13 +7,13 @@ import Html.Events exposing (..)
 
 
 type alias Model =
-    Int
-
+     Maybe Int
 
 type Msg
     = Increase Int
     | Decrease Int
     | Reset
+    | Initialize
 
 
 main =
@@ -26,29 +26,38 @@ main =
 
 init : Model
 init =
-    0
+    Nothing
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
         Increase step ->
-            model + step
+            Maybe.map ((+) step) model
 
         Decrease step ->
-            model - step
+            Maybe.map (\count -> count - step) model
 
         Reset ->
-            init
+            Just 0
+
+        Initialize ->
+            Just 0
 
 
 view : Model -> Html Msg
-view count =
-    div []
-        [ button [ type_ "button", onClick (Decrease 1)] [ text "-" ]
-        , button [ type_ "button", onClick (Decrease 5)] [ text "-5" ]
-        , text (String.fromInt count)
-        , button [ type_ "button", onClick (Increase 1)] [ text "+" ]
-        , button [ type_ "button", onClick (Increase 5)] [ text "+5" ]
-        , button [ type_ "button", onClick Reset ] [ text "Reset" ]
-        ]
+view model =
+    case model of
+        Nothing ->
+            div []
+                [ button [ type_ "button", onClick (Initialize)] [ text "Initialize" ] ]
+
+        Just count ->
+            div []
+                [ button [ type_ "button", onClick (Decrease 1)] [ text "-" ]
+                , button [ type_ "button", onClick (Decrease 5)] [ text "-5" ]
+                , text (String.fromInt count)
+                , button [ type_ "button", onClick (Increase 1)] [ text "+" ]
+                , button [ type_ "button", onClick (Increase 5)] [ text "+5" ]
+                , button [ type_ "button", onClick Reset ] [ text "Reset" ]
+                ]
